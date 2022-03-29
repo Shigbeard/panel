@@ -5,6 +5,7 @@ import ContentContainer from '@/components/elements/ContentContainer';
 import tw from 'twin.macro';
 import ServerContentBlock from '@/components/elements/ServerContentBlock';
 import ServerDetailsBlock from '@/components/server/ServerDetailsBlock';
+import ServerInfoBlock from '@/components/server/ServerInfo';
 import isEqual from 'react-fast-compare';
 import PowerControls from '@/components/server/PowerControls';
 import { EulaModalFeature, JavaVersionModalFeature, GSLTokenModalFeature, PIDLimitModalFeature, SteamDiskSpaceFeature } from '@feature/index';
@@ -25,6 +26,7 @@ const ServerConsole = () => {
         <ServerContentBlock title={'Console'} css={tw`flex flex-wrap`}>
             <div css={tw`w-full lg:w-1/4`}>
                 <ServerDetailsBlock/>
+                <ServerInfoBlock/>
                 {isInstalling ?
                     <div css={tw`mt-4 rounded bg-yellow-500 p-3`}>
                         <ContentContainer>

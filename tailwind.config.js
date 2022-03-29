@@ -92,6 +92,17 @@ module.exports = {
             borderColor: theme => ({
                 default: theme('colors.neutral.400', 'currentColor'),
             }),
+            flex: {
+                'l': '1 45%',
+                'm': '2 20%',
+                'r': '3 35%',
+            },
+            maxWidth: {
+                'name': '6rem',
+            },
+            minHeight: {
+                '16': '4rem',
+            },
         },
     },
     plugins: [
