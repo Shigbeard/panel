@@ -93,12 +93,15 @@ module.exports = {
                 default: theme('colors.neutral.400', 'currentColor'),
             }),
             flex: {
-                'l': '1 45%',
-                'm': '2 20%',
-                'r': '3 35%',
+                'l': '1 100%',
+                'm': '2 10%',
+                'r': '3 25%',
+                'alt-1': '1 50%',
+                'alt-2': '2 100%',
             },
             maxWidth: {
                 'name': '6rem',
+                'name-alt': '12rem',
             },
             minHeight: {
                 '16': '4rem',

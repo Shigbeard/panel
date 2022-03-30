@@ -33,7 +33,7 @@ function timeToHumanReadable (time: number): string {
     const minutes = Math.floor(time / 60);
     const hours = Math.floor(minutes / 60);
 
-    return `${hours < 10 ? `0${hours}` : hours}:${minutes % 60 < 10 ? `0${minutes % 60}` : minutes % 60}:${seconds < 10 ? `0${seconds}` : seconds}`;
+    return `${hours > 0 ? `${hours}:` : ''}${minutes % 60}:${seconds < 10 ? `0${seconds}` : seconds}`;
 }
 
 function playerIsConnecting (player: Player): boolean {
@@ -42,7 +42,6 @@ function playerIsConnecting (player: Player): boolean {
 
 const ServerInfoBlock = () => {
     const [ info, setInfo ] = useState<ServerInfo>({ online: false, map: '', players: 0, maxPlayers: 0, playerList: [] });
-
     const connected = ServerContext.useStoreState(state => state.socket.connected);
     const instance = ServerContext.useStoreState(state => state.socket.instance);
     // const infoErrorer = () => {
@@ -80,6 +79,7 @@ const ServerInfoBlock = () => {
             playerList: playerList || [],
         });
     };
+    // const serverEgg: string = ServerContext.useStoreState(state => state.server.data!)
     // const serverIP: string = ServerContext.useStoreState(state => state.server.data!.allocations.filter(alloc => alloc.isDefault).map(
     //     allocation => (allocation.alias || formatIp(allocation.ip))
     // ))[0];
@@ -107,7 +107,7 @@ const ServerInfoBlock = () => {
             maxplayers: 32,
             players: [
                 {
-                    name: 'Player 1',
+                    name: 'Gamer with a really long name',
                     score: 12,
                     time: 300,
                 },
@@ -161,30 +161,49 @@ const ServerInfoBlock = () => {
     const maxPlayers = info.maxPlayers;
     const playerList = info.playerList;
     const playerListElements = [];
+    const status = ServerContext.useStoreState(state => state.status.value);
+    let i = 1;
     for (const player of playerList) {
-        playerListElements.push(<PlayerRow playerName={playerIsConnecting(player) ? 'Connecting' : player.name } score={player.score} time={player.time} />);
+        playerListElements.push(<PlayerRow r={i} playerName={playerIsConnecting(player) ? 'Connecting' : player.name } score={player.score.toString()} time={player.time} />);
+        i++;
     }
-    return (
-        <TitledGreyBox css={tw`break-words mt-4`} title={'Server Info'} icon={faServer}>
-            <p css={tw`text-xs uppercase`}>
-                <FontAwesomeIcon icon={faCircle} fixedWidth css={[ tw`mr-1`, visibleToColor(online) ]} />
-                &nbsp;{online ? 'Online' : 'Offline'}
-            </p>
-            <p css={tw`text-xs mt-2`}>
-                <FontAwesomeIcon icon={faMap} fixedWidth css={tw`mr-1`} />
-                <code css={tw`ml-1`}>{map}</code>
-            </p>
-            <p css={tw`text-xs mt-2`}>
-                <FontAwesomeIcon icon={faUsers} fixedWidth css={tw`mr-1`} /> {players}
-                <span css={tw`text-neutral-500`}> / {maxPlayers}</span>
-            </p>
-            <PlayerList>
-                <div css={tw`overflow-x-hidden overflow-y-scroll max-h-32 min-h-16`}>
-                    {playerListElements.length > 0 ? playerListElements : <p css={tw`text-xs ml-1`}>No players online</p>}
+    if (status === 'running') {
+        return (
+            <TitledGreyBox css={tw`break-words mt-4`} title={'Server Info'} icon={faServer}>
+                <div css={tw`flex`}>
+                    <div css={tw`flex-alt-1 w-max overflow-ellipsis`}>
+                        <p css={tw`text-xs uppercase`}>
+                            <FontAwesomeIcon icon={faCircle} fixedWidth css={[ tw`mr-1`, visibleToColor(online) ]} />
+                            &nbsp;{online ? 'Online' : 'Offline'}
+                        </p>
+                        <p css={tw`text-xs mt-2`}>
+                            <FontAwesomeIcon icon={faMap} fixedWidth css={tw`mr-1`} />
+                            <code css={tw`ml-1`}>{map}</code>
+                        </p>
+                        <p css={tw`text-xs mt-2`}>
+                            <FontAwesomeIcon icon={faUsers} fixedWidth css={tw`mr-1`} /> {players}
+                            <span css={tw`text-neutral-500`}> / {maxPlayers}</span>
+                        </p>
+                    </div>
+                    <div css={tw`flex-alt-2 w-max`}>
+                        <PlayerList>
+                            <div css={tw`overflow-x-hidden overflow-y-scroll max-h-32 min-h-16`}>
+                                {playerListElements.length > 0 ? playerListElements : <p css={tw`text-xs ml-1`}>No players online</p>}
+                            </div>
+                        </PlayerList>
+                    </div>
                 </div>
-            </PlayerList>
-        </TitledGreyBox>
-    );
+            </TitledGreyBox>
+        );
+    } else {
+        return (
+            <TitledGreyBox css={tw`break-words mt-4`} title={'Server Info'} icon={faServer}>
+                <p css={tw`text-xs text-neutral-400 text-center p-3`}>
+                    Server is {status !== null ? status : 'offline'}.
+                </p>
+            </TitledGreyBox>
+        );
+    }
 };
 
 export default ServerInfoBlock;

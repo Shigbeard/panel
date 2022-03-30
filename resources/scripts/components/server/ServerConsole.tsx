@@ -26,7 +26,6 @@ const ServerConsole = () => {
         <ServerContentBlock title={'Console'} css={tw`flex flex-wrap`}>
             <div css={tw`w-full lg:w-1/4`}>
                 <ServerDetailsBlock/>
-                <ServerInfoBlock/>
                 {isInstalling ?
                     <div css={tw`mt-4 rounded bg-yellow-500 p-3`}>
                         <ContentContainer>
@@ -57,6 +56,7 @@ const ServerConsole = () => {
                     <ErrorBoundary>
                         <ChunkedConsole/>
                     </ErrorBoundary>
+                    {eggFeatures.includes('server_info') && <ServerInfoBlock/>}
                     <ChunkedStatGraphs/>
                 </Spinner.Suspense>
                 <React.Suspense fallback={null}>
